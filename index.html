@@ -3,70 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boletim Digital</title>
+  <title>Boletim Digital — Dashboard Escolar</title>
+  
+  <!-- Tipografia Profissional: Plus Jakarta Sans via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="cabecalho">
-    <h1>Boletim Digital</h1>
-    <p class="subtitulo">9º Ano &bull; Estudante Exemplo</p>
+  <!-- Cabeçalho Principal -->
+  <header class="cabecalho" role="banner">
+    <div class="cabecalho-conteudo">
+      <div class="tag-status">Ano Letivo 2026</div>
+      <h1>Boletim Digital</h1>
+      <p class="subtitulo">
+        <span>9º Ano</span> &bull; <span>Estudante Exemplo</span>
+      </p>
+    </div>
   </header>
 
-  <main class="conteiner">
-    <!-- Área de cards de resumo -->
-    <section class="cards-resumo">
-      <div class="card">
-        <h3>Média Geral</h3>
+  <!-- Conteúdo Principal -->
+  <main class="conteiner" role="main">
+
+    <!-- Grid de Cards de Resumo com Glassmorphism -->
+    <section class="cards-resumo" aria-label="Resumo Geral de Desempenho">
+      <article class="card card-destaque">
+        <div class="card-cabecalho">
+          <h3>Média Geral</h3>
+          <span class="icone-card" aria-hidden="true">📊</span>
+        </div>
         <p id="media-geral" class="valor-card">—</p>
-      </div>
+        <span class="subtexto-card">Média de referência: 6,0</span>
+      </article>
 
-      <div class="card">
-        <h3>Total de Faltas</h3>
+      <article class="card">
+        <div class="card-cabecalho">
+          <h3>Total de Faltas</h3>
+          <span class="icone-card" aria-hidden="true">📌</span>
+        </div>
         <p id="total-faltas" class="valor-card">—</p>
-      </div>
+        <span class="subtexto-card">Acumulado dos 3 trimestres</span>
+      </article>
 
-      <div class="card">
-        <h3>Bom Desempenho</h3>
+      <article class="card card-sucesso">
+        <div class="card-cabecalho">
+          <h3>Bom Desempenho</h3>
+          <span class="icone-card" aria-hidden="true">✨</span>
+        </div>
         <p id="qtd-bom-desempenho" class="valor-card">—</p>
-      </div>
+        <span class="subtexto-card">Disciplinas com média &ge; 6,0</span>
+      </article>
 
-      <div class="card">
-        <h3>Precisam de Atenção</h3>
+      <article class="card card-alerta">
+        <div class="card-cabecalho">
+          <h3>Precisam de Atenção</h3>
+          <span class="icone-card" aria-hidden="true">⚠️</span>
+        </div>
         <p id="qtd-atencao" class="valor-card">—</p>
-      </div>
+        <span class="subtexto-card">Disciplinas com média &lt; 6,0</span>
+      </article>
 
-      <div class="card">
-        <h3>Frequência</h3>
+      <article class="card">
+        <div class="card-cabecalho">
+          <h3>Frequência</h3>
+          <span class="icone-card" aria-hidden="true">🛡️</span>
+        </div>
         <p id="frequencia" class="valor-card">92%</p>
-        <span class="subtexto-card">Frequência adequada</span>
-      </div>
+        <span class="subtexto-card badge-frequencia">Frequência adequada</span>
+      </article>
     </section>
 
-    <!-- Tabela de disciplinas e notas -->
-    <section class="secao-tabela">
+    <!-- Seção da Tabela com Dicas de Ordenação -->
+    <section class="secao-tabela" aria-label="Notas por Disciplina">
+      <div class="tabela-header-bar">
+        <h2>Detalhamento por Disciplina</h2>
+        <p class="dica-ordenacao">Clique nos cabeçalhos das colunas para ordenar</p>
+      </div>
+
       <div class="tabela-wrapper">
-        <table>
+        <table aria-label="Tabela de Notas e Faltas">
           <thead>
             <tr>
-              <th>Disciplina</th>
-              <th>1º Tri</th>
-              <th>2º Tri</th>
-              <th>3º Tri</th>
-              <th>Média</th>
-              <th>Faltas</th>
-              <th>Situação</th>
+              <th scope="col" class="col-sortable" data-col="disciplina">
+                Disciplina <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="col-sortable text-center" data-col="tri1">
+                1º Tri <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="col-sortable text-center" data-col="tri2">
+                2º Tri <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="col-sortable text-center" data-col="tri3">
+                3º Tri <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="col-sortable text-center" data-col="media">
+                Média <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="col-sortable text-center" data-col="totalFaltas">
+                Faltas <span class="sort-icon">↕</span>
+              </th>
+              <th scope="col" class="text-center">Situação</th>
             </tr>
           </thead>
           <tbody id="corpo-tabela">
-            <!-- As linhas da tabela serão inseridas pelo JavaScript -->
+            <!-- Inserido dinamicamente via JS -->
           </tbody>
         </table>
       </div>
     </section>
+
   </main>
 
-  <!-- Script do JavaScript -->
+  <!-- Javascript Principal -->
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,4 +1,6 @@
-// Dados fictícios padronizados das disciplinas (brutos)
+/**
+ * DADOS FICTÍCIOS PADRONIZADOS — 9º ANO
+ */
 const dadosDisciplinas = [
   { disciplina: "Língua Portuguesa", tri1: 78, tri2: "8,2", tri3: 8.6, faltas: [2, 2, 1] },
   { disciplina: "Matemática", tri1: 55, tri2: "5,4", tri3: null, faltas: [3, 2, 2] },
@@ -17,132 +19,185 @@ const dadosDisciplinas = [
   { disciplina: "Práticas Experimentais", tri1: 64, tri2: "6,6", tri3: 7.0, faltas: [1, 1, 1] }
 ];
 
-// NOTA: A frequência exibida no card (92%) é APENAS FICTÍCIA/DEMONSTRATIVA para esta etapa.
+// Estado de ordenação da tabela
+let ordenacaoAtual = { coluna: null, ascendente: true };
 
 /**
- * Função para normalizar qualquer valor de nota para a escala de 0 a 10.
+ * Normaliza notas para a escala de 0 a 10.
  */
 function normalizarNota(valor) {
-  // Trata valores ausentes, nulos ou indefinidos
-  if (valor === null || valor === undefined || valor === "") {
-    return null;
-  }
-
-  // Se for texto com vírgula decimal, converte para ponto
-  if (typeof valor === "string") {
-    valor = valor.replace(",", ".");
-  }
-
+  if (valor === null || valor === undefined || valor === "") return null;
+  if (typeof valor === "string") valor = valor.replace(",", ".");
+  
   const num = Number(valor);
+  if (isNaN(num)) return null;
 
-  // Se não for um número válido, descarta
-  if (isNaN(num)) {
-    return null;
-  }
-
-  // Regra: de 0 a 10
-  if (num >= 0 && num <= 10) {
-    return num;
-  }
-
-  // Regra: maiores que 10 e menores ou iguais a 100 dividem por 10
-  if (num > 10 && num <= 100) {
-    return num / 10;
-  }
-
-  // Qualquer outro valor é inválido
+  if (num >= 0 && num <= 10) return num;
+  if (num > 10 && num <= 100) return num / 10;
   return null;
 }
 
-/**
- * Calcula a média simples usando apenas as notas válidas disponíveis.
- */
 function calcularMedia(notas) {
-  const notasValidas = notas.filter(n => n !== null);
-  if (notasValidas.length === 0) return null;
-
-  const soma = notasValidas.reduce((acc, curr) => acc + curr, 0);
-  return soma / notasValidas.length;
+  const validas = notas.filter(n => n !== null);
+  if (validas.length === 0) return null;
+  return validas.reduce((acc, c) => acc + c, 0) / validas.length;
 }
 
-/**
- * Soma o total de faltas dos trimestres.
- */
-function somarFaltas(listaFaltas) {
-  return listaFaltas.reduce((acc, curr) => acc + curr, 0);
+function somarFaltas(faltas) {
+  return faltas.reduce((acc, c) => acc + c, 0);
 }
 
-/**
- * Formata a nota para exibição na tabela.
- */
-function formatarNotaExibicao(nota) {
+function formatarNota(nota) {
   if (nota === null) return "—";
   return nota.toFixed(1).replace(".", ",");
 }
 
-// Inicialização da renderização da página
-function inicializarBoletim() {
-  const corpoTabela = document.getElementById("corpo-tabela");
-  corpoTabela.innerHTML = "";
-
-  let somaMedias = 0;
-  let disciplinasComMedia = 0;
-  let totalFaltasGeral = 0;
-  let qtdBomDesempenho = 0;
-  let qtdAtencao = 0;
-
-  dadosDisciplinas.forEach(item => {
-    // 1. Normaliza as notas
-    const n1 = normalizarNota(item.tri1);
-    const n2 = normalizarNota(item.tri2);
-    const n3 = normalizarNota(item.tri3);
-
-    // 2. Calcula média e faltas
-    const media = calcularMedia([n1, n2, n3]);
+/**
+ * Processa o dataset bruto e constrói objetos tratados
+ */
+function processarDados() {
+  return dadosDisciplinas.map(item => {
+    const tri1 = normalizarNota(item.tri1);
+    const tri2 = normalizarNota(item.tri2);
+    const tri3 = normalizarNota(item.tri3);
+    const media = calcularMedia([tri1, tri2, tri3]);
     const totalFaltas = somarFaltas(item.faltas);
-    totalFaltasGeral += totalFaltas;
 
-    // 3. Define a situação
     let situacaoTexto = "Nota ainda não disponível";
-    let situacaoClasse = "situacao-indisponivel";
+    let situacaoClasse = "status-indisponivel";
 
     if (media !== null) {
-      somaMedias += media;
-      disciplinasComMedia++;
-
       if (media >= 6.0) {
         situacaoTexto = "Bom desempenho";
-        situacaoClasse = "situacao-bom";
-        qtdBomDesempenho++;
+        situacaoClasse = "status-bom";
       } else {
         situacaoTexto = "Atenção";
-        situacaoClasse = "situacao-atencao";
-        qtdAtencao++;
+        situacaoClasse = "status-atencao";
       }
     }
 
-    // 4. Cria a linha da tabela dinamicamente
+    return {
+      disciplina: item.disciplina,
+      tri1, tri2, tri3,
+      media,
+      totalFaltas,
+      situacaoTexto,
+      situacaoClasse
+    };
+  });
+}
+
+/**
+ * Animação fluida de contagem numérica nos cards (Count-Up Animation)
+ */
+function animarContador(idElemento, valorFinal, eDecimal = false) {
+  const el = document.getElementById(idElemento);
+  if (!el || valorFinal === null || isNaN(valorFinal)) return;
+
+  let inicio = 0;
+  const duracao = 800; // ms
+  const passos = 30;
+  const incremento = valorFinal / passos;
+  const tempoPasso = duracao / passos;
+
+  const timer = setInterval(() => {
+    inicio += incremento;
+    if (inicio >= valorFinal) {
+      inicio = valorFinal;
+      clearInterval(timer);
+    }
+    el.textContent = eDecimal 
+      ? inicio.toFixed(1).replace(".", ",") 
+      : Math.floor(inicio);
+  }, tempoPasso);
+}
+
+/**
+ * Renderiza a tabela HTML com base em um array de dados
+ */
+function renderizarTabela(lista) {
+  const corpoTabela = document.getElementById("corpo-tabela");
+  corpoTabela.innerHTML = "";
+
+  lista.forEach(item => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><strong>${item.disciplina}</strong></td>
-      <td>${formatarNotaExibicao(n1)}</td>
-      <td>${formatarNotaExibicao(n2)}</td>
-      <td>${formatarNotaExibicao(n3)}</td>
-      <td><strong>${formatarNotaExibicao(media)}</strong></td>
-      <td>${totalFaltas}</td>
-      <td class="${situacaoClasse}">${situacaoTexto}</td>
+      <td class="text-center">${formatarNota(item.tri1)}</td>
+      <td class="text-center">${formatarNota(item.tri2)}</td>
+      <td class="text-center">${formatarNota(item.tri3)}</td>
+      <td class="text-center"><strong>${formatarNota(item.media)}</strong></td>
+      <td class="text-center">${item.totalFaltas}</td>
+      <td class="text-center">
+        <span class="badge-status ${item.situacaoClasse}">${item.situacaoTexto}</span>
+      </td>
     `;
     corpoTabela.appendChild(tr);
   });
-
-  // 5. Atualiza os cards superiores
-  const mediaGeralCalculada = disciplinasComMedia > 0 ? (somaMedias / disciplinasComMedia).toFixed(1).replace(".", ",") : "—";
-  
-  document.getElementById("media-geral").textContent = mediaGeralCalculada;
-  document.getElementById("total-faltas").textContent = totalFaltasGeral;
-  document.getElementById("qtd-bom-desempenho").textContent = qtdBomDesempenho;
-  document.getElementById("qtd-atencao").textContent = qtdAtencao;
 }
 
-// Executa o preenchimento após carregar
-document.addEventListener("DOMContentLoaded", inicializarBoletim);
+/**
+ * Configura ordenação interativa nas colunas da tabela
+ */
+function configurarOrdenacao(dadosProcessados) {
+  const cabecalhos = document.querySelectorAll(".col-sortable");
+
+  cabecalhos.forEach(th => {
+    th.addEventListener("click", () => {
+      const coluna = th.getAttribute("data-col");
+
+      if (ordenacaoAtual.coluna === coluna) {
+        ordenacaoAtual.ascendente = !ordenacaoAtual.ascendente;
+      } else {
+        ordenacaoAtual.coluna = coluna;
+        ordenacaoAtual.ascendente = true;
+      }
+
+      dadosProcessados.sort((a, b) => {
+        let valA = a[coluna];
+        let valB = b[coluna];
+
+        if (valA === null) return 1;
+        if (valB === null) return -1;
+
+        if (typeof valA === "string") {
+          return ordenacaoAtual.ascendente 
+            ? valA.localeCompare(valB) 
+            : valB.localeCompare(valA);
+        }
+
+        return ordenacaoAtual.ascendente ? valA - valB : valB - valA;
+      });
+
+      renderizarTabela(dadosProcessados);
+    });
+  });
+}
+
+/**
+ * Inicialização principal do Dashboard
+ */
+function inicializarDashboard() {
+  const dados = processarDados();
+
+  // 1. Renderiza tabela inicial
+  renderizarTabela(dados);
+
+  // 2. Calcula métricas gerais
+  const disciplinasComMedia = dados.filter(d => d.media !== null);
+  const mediaGeral = disciplinasComMedia.reduce((acc, c) => acc + c.media, 0) / disciplinasComMedia.length;
+  const totalFaltasGeral = dados.reduce((acc, c) => acc + c.totalFaltas, 0);
+  const qtdBomDesempenho = dados.filter(d => d.media !== null && d.media >= 6.0).length;
+  const qtdAtencao = dados.filter(d => d.media !== null && d.media < 6.0).length;
+
+  // 3. Executa animações de contagem
+  animarContador("media-geral", mediaGeral, true);
+  animarContador("total-faltas", totalFaltasGeral, false);
+  animarContador("qtd-bom-desempenho", qtdBomDesempenho, false);
+  animarContador("qtd-atencao", qtdAtencao, false);
+
+  // 4. Habilita filtros interativos
+  configurarOrdenacao(dados);
+}
+
+document.addEventListener("DOMContentLoaded", inicializarDashboard);

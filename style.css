@@ -1,4 +1,41 @@
-/* Configurações gerais da página */
+/* ==========================================================================
+   DESIGN SYSTEM & VARIÁVEIS (Paleta Abyss Premium)
+   ========================================================================== */
+:root {
+  /* Cores Base Escuras (Abyss Theme) */
+  --bg-main: #060B11;
+  --bg-card: rgba(15, 25, 38, 0.7);
+  --bg-card-hover: rgba(22, 36, 54, 0.85);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.18);
+
+  /* Cores Tipográficas */
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  /* Cores de Destaque Semântico */
+  --accent-gold: #F59E0B;
+  --accent-gold-glow: rgba(245, 158, 11, 0.15);
+  
+  --status-success: #10B981;
+  --status-success-bg: rgba(16, 185, 129, 0.12);
+  
+  --status-warning: #EF4444;
+  --status-warning-bg: rgba(239, 68, 68, 0.12);
+  
+  --status-neutral: #64748B;
+  --status-neutral-bg: rgba(100, 116, 139, 0.12);
+
+  /* Fontes e Raios */
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --shadow-glow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Reset e Box Sizing */
 * {
   margin: 0;
   padding: 0;
@@ -6,138 +43,259 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #001122; /* Cor principal: Abyss */
-  color: #f7f9fb; /* Cor secundária: Off-white */
-  padding: 20px;
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(14, 116, 144, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.5) 0px, transparent 50%);
+  color: var(--text-primary);
+  padding: 32px 16px;
   min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 .conteiner {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Cabeçalho estilo acadêmico */
+/* ==========================================================================
+   CABEÇALHO
+   ========================================================================== */
 .cabecalho {
   text-align: center;
-  padding: 30px 10px;
-  border-bottom: 2px solid #1a2b3c;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+}
+
+.tag-status {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--accent-gold);
+  background: var(--accent-gold-glow);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
 }
 
 .cabecalho h1 {
-  font-size: 2.2rem;
-  letter-spacing: 1px;
-  color: #f7f9fb;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
 }
 
 .subtitulo {
-  font-size: 1.1rem;
-  color: #b0c0d0;
-  margin-top: 8px;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-/* Cards de resumo flutuantes */
+/* ==========================================================================
+   CARDS DE RESUMO (Glassmorphism & Micro-interações)
+   ========================================================================== */
 .cards-resumo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
 }
 
 .card {
-  background-color: #0a1e33;
-  border: 1px solid #1e354d;
-  border-radius: 12px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  flex: 1 1 180px;
-  text-align: center;
-  /* Sombra leve para o efeito de flutuar */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card:hover {
-  transform: translateY(-4px); /* Sobe suavemente ao passar o mouse */
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+}
+
+.card-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .card h3 {
-  font-size: 0.9rem;
-  color: #9cb0c5;
-  margin-bottom: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.icone-card {
+  font-size: 1.1rem;
 }
 
 .valor-card {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #f7f9fb;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
 }
 
 .subtexto-card {
-  display: block;
   font-size: 0.75rem;
-  color: #7a92a8;
-  margin-top: 6px;
+  color: var(--text-muted);
 }
 
-/* Área da Tabela Responsiva */
+/* Variações Visuais de Cards */
+.card-destaque {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(15, 25, 38, 0.7) 100%);
+}
+
+.card-sucesso .valor-card { color: var(--status-success); }
+.card-alerta .valor-card { color: var(--status-warning); }
+
+.badge-frequencia {
+  color: var(--status-success);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   TABELA DE DISCIPLINAS
+   ========================================================================== */
 .secao-tabela {
-  background-color: #0a1e33;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  border: 1px solid #1e354d;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-glow);
+}
+
+.tabela-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tabela-header-bar h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dica-ordenacao {
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .tabela-wrapper {
-  overflow-x: auto; /* Permite rolar na horizontal no celular */
+  overflow-x: auto;
+  border-radius: var(--radius-md);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  min-width: 650px;
-}
-
-th, td {
-  padding: 14px 16px;
-  font-size: 0.95rem;
+  min-width: 700px;
 }
 
 th {
-  background-color: #12283f;
-  color: #d0e0f0;
-  font-weight: 600;
-  border-bottom: 2px solid #243e5a;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  user-select: none;
 }
 
-/* Fundo alternado nas linhas da tabela */
-tbody tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.03);
+.col-sortable {
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.07);
+.col-sortable:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sort-icon {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  margin-left: 4px;
 }
 
 td {
-  border-bottom: 1px solid #182e44;
+  padding: 16px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.15s ease;
 }
 
-/* Estilos de destaques para Situação */
-.situacao-bom {
-  color: #5cdb95;
-  font-weight: 600;
+tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.situacao-atencao {
-  color: #ff8b94;
-  font-weight: 600;
+.text-center { text-align: center; }
+
+/* Badging / Pílulas de Situação */
+.badge-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.situacao-indisponivel {
-  color: #8a9ba8;
+.status-bom {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-atencao {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.status-indisponivel {
+  color: var(--status-neutral);
+  background: var(--status-neutral-bg);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (Tablets e Celulares)
+   ========================================================================== */
+@media (max-width: 768px) {
+  body { padding: 20px 12px; }
+  .cabecalho h1 { font-size: 1.8rem; }
+  .cards-resumo { grid-template-columns: repeat(2, 1fr); }
+  .secao-tabela { padding: 16px; }
+}
+
+@media (max-width: 480px) {
+  .cards-resumo { grid-template-columns: 1fr; }
 }
